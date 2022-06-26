@@ -8,13 +8,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DemoApplication implements ApplicationRunner {
 
+    public DemoApplication(DriverRepository driverRepository) {
+        this.driverRepository = driverRepository;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
 
+    private final DriverRepository driverRepository;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
-        System.out.println("hello");
+    public void run(ApplicationArguments args) {
+        Driver driver = new Driver("aaa");
+        Driver savedDriver = driverRepository.save(driver);
+
+        System.out.printf("%s,%s", savedDriver.id, savedDriver.test);
+
     }
 }
