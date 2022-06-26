@@ -38,6 +38,16 @@ resource "aws_subnet" "db_subnet_2" {
   availability_zone = "ap-northeast-1c"
 }
 
+resource "aws_route_table_association" "a" {
+  route_table_id = aws_route_table.public.id
+  subnet_id = aws_subnet.db_subnet_1.id
+}
+
+resource "aws_route_table_association" "c" {
+  route_table_id = aws_route_table.public.id
+  subnet_id = aws_subnet.db_subnet_2.id
+}
+
 resource "aws_db_subnet_group" "this" {
   subnet_ids = [aws_subnet.db_subnet_1.id, aws_subnet.db_subnet_2.id]
 }
@@ -49,11 +59,15 @@ resource "aws_security_group" "this" {
     from_port = 3306
     protocol  = "tcp"
     to_port   = 3306
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
   egress {
     from_port = 0
     protocol  = "-1"
     to_port   = 0
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 }
 
@@ -72,7 +86,7 @@ resource "aws_rds_cluster" "this" {
   cluster_identifier              = "my-aurora-cluster"
   engine                          = "aurora-mysql"
   engine_version                  = "5.7.mysql_aurora.2.10.2"
-  availability_zones              = ["ap-northeast-1a"]
+  availability_zones              = ["ap-northeast-1a", "ap-northeast-1c"]
   master_username                 = local.master_username
   master_password                 = local.master_password
   port                            = 3306
