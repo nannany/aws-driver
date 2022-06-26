@@ -85,7 +85,7 @@ resource "aws_rds_cluster_parameter_group" "this" {
 resource "aws_rds_cluster" "this" {
   cluster_identifier              = "my-aurora-cluster"
   engine                          = "aurora-mysql"
-  engine_version                  = "5.7.mysql_aurora.2.10.2"
+  engine_version                  = "5.7.mysql_aurora.2.07.2"
   availability_zones              = ["ap-northeast-1a", "ap-northeast-1c"]
   master_username                 = local.master_username
   master_password                 = local.master_password
